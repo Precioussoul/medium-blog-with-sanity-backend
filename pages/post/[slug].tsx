@@ -1,7 +1,8 @@
 import { GetStaticProps } from "next";
+import Image from "next/image";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import PortableText from "react-portable-text";
+import PortableText from "react-portable-text/dist";
 import { sanityClient, urlFor } from "../../sanity";
 import { Post, Posts } from "../../typings";
 
@@ -18,7 +19,6 @@ interface IformInput {
 
 function Post({ post }: Props) {
   const [submitted, setSubmitted] = useState(false);
-  console.log(post);
 
   const {
     register,
@@ -44,9 +44,11 @@ function Post({ post }: Props) {
   };
   return (
     <div>
-      <img
+      <Image
         src={urlFor(post.mainImage).url()!}
         alt={post.title}
+        width={1000}
+        height={1000}
         className="w-full h-40 object-cover"
       />
       <article className="max-w-3xl mx-auto p-5">
@@ -56,10 +58,12 @@ function Post({ post }: Props) {
         </h2>
 
         <div>
-          <img
+          <Image
             className="h-10 w-10 rounded-full"
             src={urlFor(post.author.image).url()!}
             alt={post.author.name}
+            width={1000}
+            height={1000}
           />
           <p className="font-extralight text-sm">
             Blog post by{" "}
@@ -246,5 +250,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       post,
     },
+    revalidate: 10,
   };
 };
